@@ -1,0 +1,93 @@
+class CargoCompany:
+    def __init__(self, company_name: str, price_per_ton: float):
+        self._company_name = ""
+        self._price_per_ton = 0.0
+        self._total_weight_transported = 0.0
+        
+        # Используем свойства для валидации
+        self.company_name = company_name
+        self.price_per_ton = price_per_ton
+    
+    @property
+    def company_name(self) -> str:
+        return self._company_name
+    
+    @company_name.setter
+    def company_name(self, value: str):
+        if not value or value.isspace():
+            raise ValueError("Название компании не может быть пустым")
+        self._company_name = value
+    
+    @property
+    def price_per_ton(self) -> float:
+        return self._price_per_ton
+    
+    @price_per_ton.setter
+    def price_per_ton(self, value: float):
+        if value <= 0:
+            raise ValueError("Цена за тонну должна быть положительной")
+        if value > 1000000:  # Верхняя граница цены
+            raise ValueError("Цена за тонну не может превышать 1,000,000")
+        self._price_per_ton = value
+    
+    @property
+    def total_weight_transported(self) -> float:
+        return self._total_weight_transported
+    
+    def add_transportation(self, weight: float):
+        if weight <= 0:
+            raise ValueError("Вес груза должен быть положительным")
+        self._total_weight_transported += weight
+    
+    def calculate_total_revenue(self) -> float:
+        return self._total_weight_transported * self._price_per_ton
+    
+    def get_company_info(self) -> str:
+        return (f"Компания: {self.company_name}\n"
+                f"Цена за тонну: {self.price_per_ton:.2f}\n"
+                f"Перевезено грузов: {self.total_weight_transported:.2f} тонн\n"
+                f"Общая выручка: {self.calculate_total_revenue():.2f}")
+    
+    @staticmethod
+    def create_company(name: str, price: float) -> 'CargoCompany':
+        return CargoCompany(name, price)
+
+
+def main():
+    try:
+        # Создание компании
+        company = CargoCompany("ГрузЭкспресс", 1500.50)
+        print(f"Имя компании: {company.company_name}")
+
+        # Добавление перевезенных грузов
+        company.add_transportation(10.5)
+        company.add_transportation(25.3)
+        company.add_transportation(15.7)
+
+        # Вывод информации
+        print(company.get_company_info())
+        print()
+
+        # Демонстрация расчета выручки
+        last_transport_revenue = 15.7 * company.price_per_ton
+        print(f"Выручка за последнюю перевозку: {last_transport_revenue:.2f}")
+
+    except Exception as ex:
+        print(f"Ошибка: {ex}")
+
+    # Тестирование верхней границы цены
+    print("\n--- Тестирование валидации цены ---")
+    try:
+        company2 = CargoCompany("ТестКомпания", 2000000)  # Должно вызвать ошибку
+    except Exception as ex:
+        print(f"Ошибка при создании компании: {ex}")
+
+    try:
+        company3 = CargoCompany("ТестКомпания2", 500000)  # Должно работать
+        print("Компания с ценой 500,000 создана успешно")
+    except Exception as ex:
+        print(f"Ошибка: {ex}")
+
+
+if __name__ == "__main__":
+    main()
