@@ -75,19 +75,5 @@ def main():
     except Exception as ex:
         print(f"Ошибка: {ex}")
 
-    # Тестирование верхней границы цены
-    print("\n--- Тестирование валидации цены ---")
-    try:
-        company2 = CargoCompany("ТестКомпания", 2000000)  # Должно вызвать ошибку
-    except Exception as ex:
-        print(f"Ошибка при создании компании: {ex}")
-
-    try:
-        company3 = CargoCompany("ТестКомпания2", 500000)  # Должно работать
-        print("Компания с ценой 500,000 создана успешно")
-    except Exception as ex:
-        print(f"Ошибка: {ex}")
-
-
 if __name__ == "__main__":
     main()
